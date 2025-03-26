@@ -1,5 +1,3 @@
-"""This is to test that faker library works when creating payslips"""
-
 import json
 import os
 import glob
@@ -193,10 +191,10 @@ def create_header_right_table(data):
                 data["arbeitnehmer"]["av_prozentsatz"],
                 data["arbeitnehmer"]["pv_prozentsatz"],
             ],
-            ["Krankenkasse", "", "RV-Nummer", ""],
+            ["Krankenkasse", "Bgrs", "RV-Nummer", ""],
             [
                 data["arbeitnehmer"]["krankenkasse"],
-                "",
+                data["arbeitnehmer"]["beitragsgruppenschluessel"],
                 data["arbeitnehmer"]["sv_nummer"],
                 "",
             ],

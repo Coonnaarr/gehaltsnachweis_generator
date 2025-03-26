@@ -4,8 +4,8 @@ There are two steps involved generating the payslips.
 
 1. Run the Data Generator command first.
 
-python test_data_generator.py --employees 5 --months 3 --output test_data
+python3 test_data_generator.py --employees 1 --months 3 --output test_data
 
 
 2. Run the PDF Generator
-python salary_template_generator.py --input test_data
+python3 salary_template_generator.py --input test_data

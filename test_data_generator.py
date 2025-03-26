@@ -14,19 +14,43 @@ def generate_employee_data():
     first_name = fake.first_name_male() if gender == "Herr" else fake.first_name_female()
     last_name = fake.last_name()
     
+    # Generate birth date (between 20-65 years old)
+    birth_date = fake.date_of_birth(minimum_age=20, maximum_age=65)
+    birth_date_str = birth_date.strftime("%d.%m.%Y")
+    
+    # Generate entry date (between 0-10 years ago)
+    entry_date = fake.date_between(start_date="-10y", end_date="today")
+    entry_date_str = entry_date.strftime("%d.%m.%Y")
+    
+    # Format birth date for SV-Nummer (DDMM format - day and month only)
+    birth_date_sv = birth_date.strftime("%d%m")
+    
+    # Generate SV-Nummer with exactly 8 digits before the letter:
+    # - 2 digit agency code (position 1-2)
+    # - 2 digit day of birth (position 3-4)
+    # - 2 digit month of birth (position 5-6)
+    # - 2 digit counter (position 7-8)
+    # - First letter of last name (position 9)
+    # - 3 digit serial number (position 10-12)
+    agency_code = f"{random.randint(10, 99)}"
+    counter_digits = f"{random.randint(10, 99)}"
+    serial_number = f"{random.randint(100, 999)}"
+    
+    sv_nummer = f"{agency_code}{birth_date_sv}{counter_digits}{last_name[0].upper()}{serial_number}"
+    
     return {
         "gender": gender,
         "name": f"{first_name} {last_name}",
         "adresse": fake.address().replace('\n', ', '),
         "personal_nummer": f"22{fake.random_number(digits=6)}",
-        "geburtsdatum": fake.date_of_birth(minimum_age=20, maximum_age=65).strftime("%Y-%m-%d"),
+        "geburtsdatum": birth_date_str,
         "steuerklasse": str(random.randint(1, 6)),
-        "eintrittsdatum": fake.date_between(start_date="-10y", end_date="today").strftime("%d.%m.%Y"),
+        "eintrittsdatum": entry_date_str,
         "urlaubstage": random.randint(24, 30),
-        "sv_nummer": f"{fake.random_number(digits=8)}{last_name[0].upper()}{fake.random_number(digits=3)}",
+        "sv_nummer": sv_nummer,
         "krankenkasse": random.choice(["Techniker KK", "AOK", "Barmer", "DAK", "IKK"]),
         "beitragsgruppenschluessel": "1111",
-        "steuer_id": f"7{fake.random_number(digits=10)}",
+        "steuer_id": f"{fake.random_number(digits=11)}",
         "kv_prozentsatz": f"{random.uniform(7.8, 8.5):.2f} %",
         "rv_prozentsatz": "9.30 %",
         "av_prozentsatz": f"{random.uniform(1.2, 1.3):.2f} %",
